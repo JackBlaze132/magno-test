@@ -44,7 +44,7 @@ jobs:
           --protocol=gp \
           --user=${{ secrets.VPN_USER }} \
           --passwd-on-stdin \
-          --servercert pin-sha256:${{ secrets.SERVER_CERT }}
+          --servercert pin-sha256:${{ secrets.SERVER_CERT }} \
           ${{ secrets.VPN_HOST }} -b
         env:
           VPN_PASSWORD: ${{ secrets.VPN_PASSWORD }}
