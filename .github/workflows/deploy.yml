@@ -30,11 +30,17 @@ jobs:
 
     - name: Connect to VPN
       run: |
-        echo "${{ secrets.VPN_PASSWORD }}" | sudo openconnect --protocol=gp --user=${{ secrets.VPN_USER }} --passwd-on-stdin ${{ secrets.VPN_HOST }} -b
+        echo "${{ secrets.VPN_PASSWORD }}" | sudo openconnect \
+          --protocol=gp \
+          --user=${{ secrets.VPN_USER }} \
+          --passwd-on-stdin \
+          --servercert pin-sha256:${{ secrets.SERVER_CERT }} \
+          ${{ secrets.VPN_HOST }} -b
       env:
         VPN_PASSWORD: ${{ secrets.VPN_PASSWORD }}
         VPN_USER: ${{ secrets.VPN_USER }}
         VPN_HOST: ${{ secrets.VPN_HOST }}
+        SERVER_CERT: ${{ secrets.SERVER_CERT }}
 
     - name: Verify VPN connection
       run: ip a
@@ -49,7 +55,6 @@ jobs:
     - name: Clone repository on remote server
       run: |
         sshpass -p "${{ secrets.INTERNAL_SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.INTERNAL_USER }}@${{ secrets.INTERNAL_RESOURCE_IP }} '
-          ls -a
           cd ~/magno/magno || exit;
           if [ ! -d ".git" ]; then
             git clone https://github.com/JackBlaze132/magno.git
