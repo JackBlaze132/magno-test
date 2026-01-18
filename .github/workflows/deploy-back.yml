@@ -69,6 +69,7 @@ jobs:
       - name: Clone repository on remote server
         run: |
           sshpass -p "${{ secrets.INTERNAL_SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.INTERNAL_USER }}@${{ secrets.INTERNAL_RESOURCE_IP }} '
+            ls -a
             cd ~/magno/magno/ || exit;
             if [ ! -d ".git" ]; then
               git clone https://github.com/JackBlaze132/magno.git
